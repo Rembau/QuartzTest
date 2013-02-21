@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+  <!-- Job -->
+	<bean id="job" class="springQuartzTest.JobTest">
+		<property name="str" value="Rembau" />
+	</bean>
+	<!-- JobDetail -->
+	 <bean id="jobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="job" />
+		</property>
+		<property name="targetMethod">
+			<value>excute</value>
+		</property>
+	</bean>
+
+	<!-- Trigger -->
+	<bean id="trigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<ref bean="jobDetail" />
+		</property>
+		<property name="cronExpression" value="0/5 * * * * ?" />
+	</bean>
+	
+	<!-- Scheduler -->
+	<bean id="scheduler" lazy-init="false" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="trigger" />
+			</list>
+		</property>
+	</bean>
+</beans>
