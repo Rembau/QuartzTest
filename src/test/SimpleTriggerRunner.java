@@ -6,6 +6,7 @@ import org.quartz.JobDetail;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerFactory;
 import org.quartz.SimpleTrigger;
+import org.quartz.Trigger;
 import org.quartz.impl.StdSchedulerFactory;
 
 public class SimpleTriggerRunner {
@@ -23,6 +24,28 @@ public class SimpleTriggerRunner {
 			Scheduler scheduler = schedulerFactory.getScheduler();
 			scheduler.scheduleJob(jobDetail, simpleTrigger);//注册并进行调度
 			scheduler.start();//调度启动
+			
+			String gn[] = scheduler.getJobGroupNames();
+			for (String g:gn) {
+				String jb[] = scheduler.getJobNames(g);
+				for (String string : jb) {
+					System.out.println(string);
+				}
+			}
+			
+			String tgn[] = scheduler.getTriggerGroupNames();
+			for (String g:tgn) {
+				String tjb[] = scheduler.getTriggerNames(g);
+				for (String string : tjb) {
+					Trigger ct = scheduler.getTrigger(string, g);
+					System.out.println(ct.getStartTime());
+					System.out.println(ct.getEndTime());
+					System.out.println(ct.getFinalFireTime());	
+					System.out.println(ct.getNextFireTime());
+					
+					System.out.println(string);
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
